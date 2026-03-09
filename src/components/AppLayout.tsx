@@ -53,9 +53,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 py-5 border-b border-sidebar-border">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg gold-gradient">
-            <Store className="h-5 w-5 text-accent-foreground" />
-          </div>
+          <img src="/pwa-192x192.png" alt="معرض البركة" className="h-10 w-10 shrink-0 rounded-lg object-contain" />
           {!collapsed && (
             <div className="overflow-hidden">
               <h1 className="text-lg font-bold text-sidebar-primary truncate">معرض البركة</h1>

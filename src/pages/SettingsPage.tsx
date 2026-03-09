@@ -7,8 +7,9 @@ import { Store, Save } from "lucide-react";
 
 export default function SettingsPage() {
   const [storeName, setStoreName] = useState("معرض البركة");
-  const [phone, setPhone] = useState("01000000000");
-  const [address, setAddress] = useState("القاهرة - مصر");
+  const [phone, setPhone] = useState("+20 11 40796253");
+  const [address, setAddress] = useState("القبابات - اطفيح - الجيزة - بجوار مسجد الشوربجي");
+  const [manager, setManager] = useState("المهندس أحمد محسن");
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
@@ -30,6 +31,10 @@ export default function SettingsPage() {
           <div>
             <Label>اسم المعرض</Label>
             <Input value={storeName} onChange={(e) => setStoreName(e.target.value)} />
+          </div>
+          <div>
+            <Label>المدير المسؤول</Label>
+            <Input value={manager} onChange={(e) => setManager(e.target.value)} />
           </div>
           <div>
             <Label>رقم الهاتف</Label>
