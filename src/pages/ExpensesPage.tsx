@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getLocal, setLocal } from "@/utils/offlineStorage";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +23,14 @@ const initialExpenses: Expense[] = [
 ];
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState(initialExpenses);
+  const [expenses, setExpensesState] = useState(() => getLocal("cached_expenses", initialExpenses));
+  const setExpenses = (updater: Expense[] | ((prev: Expense[]) => Expense[])) => {
+    setExpensesState((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      setLocal("cached_expenses", next);
+      return next;
+    });
+  };
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editExpense, setEditExpense] = useState<Expense | null>(null);

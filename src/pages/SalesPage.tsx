@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getLocal, setLocal } from "@/utils/offlineStorage";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +34,14 @@ const initialInvoices: SalesInvoice[] = [
 const paymentMethods = ["كاش", "فيزا", "فودافون كاش", "إنستاباي"];
 
 export default function SalesPage() {
-  const [invoices, setInvoices] = useState<SalesInvoice[]>(initialInvoices);
+  const [invoices, setInvoicesState] = useState<SalesInvoice[]>(() => getLocal("cached_sales", initialInvoices));
+  const setInvoices = (updater: SalesInvoice[] | ((prev: SalesInvoice[]) => SalesInvoice[])) => {
+    setInvoicesState((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      setLocal("cached_sales", next);
+      return next;
+    });
+  };
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [viewInvoice, setViewInvoice] = useState<SalesInvoice | null>(null);

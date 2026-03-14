@@ -14,8 +14,13 @@ import {
   Store,
   TrendingUp,
   ChevronDown,
+  Wifi,
+  WifiOff,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
+import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { label: "لوحة التحكم", icon: LayoutDashboard, path: "/" },
@@ -32,6 +37,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { online, pendingCount, sync } = useOfflineSync();
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -113,6 +119,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <h2 className="text-sm font-semibold text-foreground">
             {navItems.find((i) => i.path === location.pathname)?.label || "معرض البركة"}
           </h2>
+          <div className="mr-auto flex items-center gap-2">
+            {pendingCount > 0 && (
+              <button onClick={sync} className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700">
+                <RefreshCw className="h-3.5 w-3.5" />
+                <span>{pendingCount} معلق</span>
+              </button>
+            )}
+            <div className={cn(
+              "flex items-center gap-1 text-xs px-2 py-1 rounded-full",
+              online ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
+            )}>
+              {online ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
+              <span>{online ? "متصل" : "أوفلاين"}</span>
+            </div>
+          </div>
         </header>
 
         {/* Content */}

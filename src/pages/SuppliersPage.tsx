@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getLocal, setLocal } from "@/utils/offlineStorage";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,7 +25,14 @@ const initialSuppliers: Supplier[] = [
 ];
 
 export default function SuppliersPage() {
-  const [suppliers, setSuppliers] = useState<Supplier[]>(initialSuppliers);
+  const [suppliers, setSuppliersState] = useState<Supplier[]>(() => getLocal("cached_suppliers", initialSuppliers));
+  const setSuppliers = (updater: Supplier[] | ((prev: Supplier[]) => Supplier[])) => {
+    setSuppliersState((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      setLocal("cached_suppliers", next);
+      return next;
+    });
+  };
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editSupplier, setEditSupplier] = useState<Supplier | null>(null);
